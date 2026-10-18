@@ -5,12 +5,8 @@ paths:
 
 # wiki/ 運用ルール
 
-`wiki/` は [OKF (Open Knowledge Format) v0.2](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md)
-の簡易プロファイルで運用する知識バンドル。このプロジェクトの調査・学び・アイデアを蓄積する。
-OKF のどの仕様を採用したかと理由は `docs/okf-profile.md` にある。
-
-このファイルには wiki を読むときに必要なことを書く。書くときは、書き始める前に次の skill の手順と規約に従う
-(Claude Code 以外のエージェントは `.claude/skills/<name>/SKILL.md` を読む)。
+`wiki/` は、このプロジェクトで調べたこと、分かったこと、これから試す案を蓄積する知識ベースである。
+このファイルには読み方を書く。書くときは、書き始める前に次の skill の手順と規約に従う。
 
 - 外部資料を取り込んで `sources/` に記録するとき → `wiki-ingest`
 - それ以外のページを作成・更新するとき → `wiki-write`
@@ -22,8 +18,8 @@ OKF のどの仕様を採用したかと理由は `docs/okf-profile.md` にあ�
 | `wiki/references/` | `Reference` | 従う手順・制約・前提知識 |
 | `wiki/sources/` | `Source` | 外部資料のどこに何が書いてあるか。資料 (ドキュメントサイト、リポジトリ、論文など) ごとに 1 ページ |
 | `wiki/research/` | `Research` | 読んだ資料に基づく、テーマごとの調査結果 |
-| `wiki/findings/` | `Finding` | 経験から得た理解・因果・教訓 |
-| `wiki/notes/` | `Note` | wiki に残す特定の作業・調査・障害の時点記録 |
+| `wiki/findings/` | `Finding` | このプロジェクトの作業や実験で分かった理解・因果・教訓 |
+| `wiki/notes/` | `Note` | 経緯を後から辿りたい作業・調査・障害の時点記録 |
 | `wiki/ideas/` | `Idea` | これから試す案 |
 
 `wiki/index.md` は入口で、全作業の前提になる重要ページと各ディレクトリへのリンクを持つ。全ページの一覧ではない。
@@ -44,7 +40,7 @@ rg '^resource: https://docs.example.com' wiki/sources            # 資料の Sou
 ## 読み方
 
 - `status: deprecated` のページは現行ではない。冒頭のリンクから後継ページを読む
-- 本文中の次の形の印は、直前の記述が古くなったことを示す。古い記述は経緯として残してあり、印の内容が現行である
+- 本文中の次の形の注記 (更新注記) は、直前の記述が古くなったことを示す。古い記述は経緯として残してあり、注記の内容が現行である
 
   ```markdown
   > [!NOTE]
@@ -54,7 +50,7 @@ rg '^resource: https://docs.example.com' wiki/sources            # 資料の Sou
 - `sources/` のページは、読んだ日の時点の資料の要約と抜粋である。答えに使うときは読んだ日と資料へのリンクを添える。
   Source ページに無い内容や、最新かどうかが問題になる内容は、元の資料を開いて確かめる
 - `verified` の無いページは、人が内容を確認していない
-- 未執筆のページへのリンクは、書くべき知識の印として意図的に置かれている
+- 未執筆のページへのリンクは、これから書くべきページを示すために意図的に置かれている
 
 ## 質問に答えるとき
 

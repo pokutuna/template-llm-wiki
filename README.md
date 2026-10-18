@@ -14,43 +14,9 @@
 
 `AGENTS.md` を読むエージェント (Codex CLI など) は、`AGENTS.md` の表を見て、場面に応じたファイルを読む。
 
-## 主要なファイル
-
-| パス | 役割 |
-| --- | --- |
-| `CLAUDE.md` | エージェント向けの指示の本体。プロジェクトの説明、リポジトリ構成、wiki の使い方 |
-| `AGENTS.md` | Claude Code 以外のエージェント向け。`CLAUDE.md` を読むよう指示し、どの場面でどのファイルを読むかの表を持つ |
-| `.claude/rules/wiki.md` | wiki の構成と読み方。ページの探し方、古い記述の見分け方、質問に答えるときの決まり。frontmatter の `paths` により、`wiki/` を扱うときに自動で読み込まれる |
-| `.claude/skills/wiki-ingest/SKILL.md` | 外部資料の取り込み。資料ごとの Source ページ (`wiki/sources/`) の作り方と書式。複数の資料をまとめて取り込める |
-| `.claude/skills/wiki-write/SKILL.md` | wiki の書き方。置き場所の判断、Source ページの内容の反映、frontmatter と本文の規約、書いた後の確認 |
-| `.claude/skills/wiki-lint/SKILL.md` | wiki の点検手順。ユーザーが `/wiki-lint` で呼び出したときだけ実行される |
-| `wiki/index.md` | wiki の入口。`okf_version` の宣言、重要ページ、各ディレクトリへのリンク |
-| `wiki/{references,sources,research,findings,notes,ideas}/` | ページの置き場所。ディレクトリと frontmatter の `type` が 1 対 1 で対応する |
-| `wiki/template.md` | 新規ページの雛形。コピーして `type: Template` をディレクトリに対応する値に書き換える |
-| `wiki/scripts/list-pages.sh` | ページの `title` と `description` を一覧する。ディレクトリや語で絞れる |
-| `docs/` | 人が読む設計書・レポート・発表資料。wiki のルールの対象外 |
-| `docs/okf-profile.md` | OKF のどの仕様を採用・不採用にしたかと、その理由 |
-
 ## wiki の構成
 
-| 場所 | type | 内容 |
-| --- | --- | --- |
-| `wiki/references/` | `Reference` | 従う手順・制約・前提知識 |
-| `wiki/sources/` | `Source` | 外部資料のどこに何が書いてあるか。資料 (ドキュメントサイト、リポジトリ、論文など) ごとに 1 ページ |
-| `wiki/research/` | `Research` | 読んだ資料に基づく、テーマごとの調査結果 |
-| `wiki/findings/` | `Finding` | 経験から得た理解・因果・教訓 |
-| `wiki/notes/` | `Note` | 特定の作業・調査・障害の時点記録 (`yyyymmdd-<slug>.md`) |
-| `wiki/ideas/` | `Idea` | これから試す案。`progress` で進捗を持つ |
-
-`sources/` には外部資料の本文をコピーせず、リンク、含まれている内容、要約、短い抜粋を残す。
-同じサイトの複数のページは 1 つの Source ページにまとめるので、次に調べるときは Source ページを見れば、どのページを開けばよいかが分かる。
-`research/` は資料をまたいでテーマごとに分かったことを書き、出典として Source ページか資料の URL を `sources` に載せる。
-
-`research/`、`findings/`、`sources/` は既存のページに追記して育て、`notes/` は日付付きで作って完了後は固定する。
-アイデアは `ideas/` に書き、試した経緯を `notes/`、そこから得た教訓を `findings/` に残す。
-重要なページはファイルの場所ではなく `wiki/index.md` の「重要」セクションで示す。
-
-ページの frontmatter はこうなる:
+ページは `references/`、`sources/`、`research/`、`findings/`、`notes/`、`ideas/` に分けて置く。それぞれに何を置くかは `.claude/rules/wiki.md` にある。ページの frontmatter はこうなる:
 
 ```yaml
 ---
@@ -62,8 +28,6 @@ generated: { by: claude-code/claude-opus-5-5, at: 2026-10-18T15:00:00+09:00 }
 resource: ../../src/cache.ts
 ---
 ```
-
-詳しい規約は `.claude/skills/wiki-write/SKILL.md`、Source ページの書式は `.claude/skills/wiki-ingest/SKILL.md`、OKF との対応は `docs/okf-profile.md` を参照。
 
 ## wiki の使い方
 
@@ -85,20 +49,13 @@ resource: ../../src/cache.ts
 2. `CLAUDE.md` の冒頭にプロジェクト名と目的を書く
 3. 下の「ディレクトリ構成の例」からドメインに合うものを選び、作業ディレクトリを作って `CLAUDE.md` の「リポジトリ構成」に書く
 4. `wiki/index.md` の見出しをプロジェクト名に置き換える
-5. タグの語彙が決まっているなら `.claude/skills/wiki-write/SKILL.md` の frontmatter 規約に例を書く (例: モデル名と主題を組み合わせる)
-6. この README をプロジェクトの README に書き換える
+5. この README をプロジェクトの README に書き換える
 
 ### 既存のリポジトリに導入する
 
 1. `.claude/rules/wiki.md`、`.claude/skills/wiki-ingest/`、`.claude/skills/wiki-write/`、`.claude/skills/wiki-lint/`、`wiki/`、`docs/okf-profile.md` をコピーする
 2. `CLAUDE.md` の「wiki — 知識ベース」の節を、既存の `CLAUDE.md` (無ければ新規) に書き写す
 3. Claude Code 以外のエージェントも使うなら `AGENTS.md` をコピーする。既存の `AGENTS.md` があれば「ルールと手順」の節を書き写す
-
-### AGENTS.md を読まないエージェント
-
-`AGENTS.md` も `CLAUDE.md` も読まないツールでは、そのツールの指示ファイルから `AGENTS.md` を参照させる
-(設定で読み込むファイル名を `AGENTS.md` に変えられるツールもある)。
-`.claude/rules/` と `.claude/skills/` のファイルは普通の Markdown なので、どのツールからでも読める。
 
 ## ルールを足すとき
 
@@ -114,9 +71,6 @@ resource: ../../src/cache.ts
    ```
 
 2. `AGENTS.md` の「ルールと手順」の表に、場面 (例: `experiments/**` を読み書きする前) とルールファイルの行を足す
-
-`paths` を書かないルールは、Claude Code では常に読み込まれる。`.claude/rules/` の下にはルール以外の `.md` を置かない。
-特定の作業でだけ必要な長い手順は、ルールではなく `.claude/skills/<name>/SKILL.md` に置くと、普段のコンテキストを圧迫しない。
 
 ## ディレクトリ構成の例
 
