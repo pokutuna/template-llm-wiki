@@ -16,4 +16,4 @@
 
 1. `.claude/rules/`、`.claude/skills/`、`wiki/` をコピーする
 2. `CLAUDE.md` の内容を、既存の `CLAUDE.md` に統合する
-3. Claude Code 以外のエージェントも使うなら、`AGENTS.md` を `CLAUDE.md` への symlink にする
+3. Claude Code 以外のエージェントも使うなら、`AGENTS.md` を `CLAUDE.md` への、`.agents/skills` を `../.claude/skills` への symlink にする
