@@ -9,7 +9,8 @@ argument-hint: "[対象のディレクトリまたはファイル]"
 
 対象: $ARGUMENTS (指定が無ければ `wiki/` 全体。下のコマンドの `wiki/` を対象に置き換える)
 
-書式の規約は `wiki-write` skill (`.claude/skills/wiki-write/SKILL.md`) にある。点検の前に読む。
+書式の規約は `wiki-write` skill (`.claude/skills/wiki-write/SKILL.md`)、Source ページの書式は `wiki-ingest` skill
+(`.claude/skills/wiki-ingest/SKILL.md`) にある。点検の前に読む。
 点検の間はファイルを書き換えない。報告してユーザーが選んだものだけを、最後に直す。
 
 ## 1. 機械的な点検
@@ -72,7 +73,7 @@ rg --no-heading --no-filename '^tags:' wiki/ -g '!template.md' | sed 's/^tags://
 
 ## 4. 修正
 
-ユーザーが選んだ項目だけを、`wiki-write` skill の規約に従って直す。
+ユーザーが選んだ項目だけを、`wiki-write` skill (Source ページは `wiki-ingest` skill) の規約に従って直す。
 
 - ページを消さない。現行でなくなったページには `status: deprecated` を付ける
 - 事実に関わる記述は、資料や成果物で確かめ直してから直す。確かめられないときは直さず、未確認であることを書き添える

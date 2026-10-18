@@ -2,8 +2,8 @@
 
 `wiki/` は [OKF (Open Knowledge Format) v0.2](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md)
 に適合する形で運用する。OKF の任意仕様はすべては採用せず、エージェントが日常的に読み書きする小さな wiki に必要なものだけを選んでいる。
-この文書は、何を採用し何を見送ったかと、その理由を残す。運用ルールそのものは `.claude/rules/wiki.md` (読み方) と
-`.claude/skills/wiki-write/SKILL.md` (書き方) にある。
+この文書は、何を採用し何を見送ったかと、その理由を残す。運用ルールそのものは `.claude/rules/wiki.md` (読み方) と、
+`.claude/skills/wiki-ingest/SKILL.md`・`.claude/skills/wiki-write/SKILL.md` (書き方) にある。
 
 準拠する仕様: `okf/SPEC.md` (Version 0.2、2026-08-21 時点)
 

@@ -6,7 +6,7 @@ okf_version: "0.2"
 
 <!-- 見出しをプロジェクト名に置き換える。例: # my-project wiki -->
 
-このプロジェクトの知識ベース。読み方は `.claude/rules/wiki.md`、書き方は `.claude/skills/wiki-write/SKILL.md` を参照。
+このプロジェクトの知識ベース。読み方は `.claude/rules/wiki.md`、書き方は `.claude/skills/wiki-ingest/SKILL.md` (資料の取り込み) と `.claude/skills/wiki-write/SKILL.md` を参照。
 ここは全ページの一覧ではなく、重要ページへの入口とする。
 
 ## 重要

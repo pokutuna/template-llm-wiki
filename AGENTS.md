@@ -10,5 +10,6 @@
 | 場面 | 読むファイル |
 | --- | --- |
 | `wiki/**` を読み書きする前 | `.claude/rules/wiki.md` |
+| 外部資料を wiki に取り込む前 | `.claude/skills/wiki-ingest/SKILL.md` |
 | `wiki/**` のページを作成・更新する前 | `.claude/skills/wiki-write/SKILL.md` |
 | wiki の点検を頼まれたとき | `.claude/skills/wiki-lint/SKILL.md` |

@@ -9,8 +9,8 @@
 エージェントへの指示は、読むときと書くときで分けている。
 
 - 読むときのルールは `.claude/rules/wiki.md` にあり、Claude Code は `wiki/` のファイルを扱うときだけ自動で読み込む
-- 書くときの手順と規約は `.claude/skills/wiki-write/` にあり、Claude Code は wiki に書く場面でだけ読み込む
-- 普段のコンテキストに常に入るのは、`CLAUDE.md` の数行と `wiki-write` skill の 1 行の説明だけ。点検の `wiki-lint` skill は、ユーザーが呼び出すまで読み込まれない
+- 書くときの手順と規約は `.claude/skills/wiki-ingest/` (資料の取り込み) と `.claude/skills/wiki-write/` (それ以外) にあり、Claude Code は wiki に書く場面でだけ読み込む
+- 普段のコンテキストに常に入るのは、`CLAUDE.md` の数行と、`wiki-ingest`・`wiki-write` skill の 1 行の説明だけ。点検の `wiki-lint` skill は、ユーザーが呼び出すまで読み込まれない
 
 `AGENTS.md` を読むエージェント (Codex CLI など) は、`AGENTS.md` の表を見て、場面に応じたファイルを読む。
 
@@ -21,7 +21,8 @@
 | `CLAUDE.md` | エージェント向けの指示の本体。プロジェクトの説明、リポジトリ構成、wiki の使い方 |
 | `AGENTS.md` | Claude Code 以外のエージェント向け。`CLAUDE.md` を読むよう指示し、どの場面でどのファイルを読むかの表を持つ |
 | `.claude/rules/wiki.md` | wiki の構成と読み方。ページの探し方、古い記述の見分け方、質問に答えるときの決まり。frontmatter の `paths` により、`wiki/` を扱うときに自動で読み込まれる |
-| `.claude/skills/wiki-write/SKILL.md` | wiki の書き方。置き場所の判断、外部資料の取り込み、frontmatter と本文の規約、書いた後の確認 |
+| `.claude/skills/wiki-ingest/SKILL.md` | 外部資料の取り込み。資料ごとの Source ページ (`wiki/sources/`) の作り方と書式。複数の資料をまとめて取り込める |
+| `.claude/skills/wiki-write/SKILL.md` | wiki の書き方。置き場所の判断、Source ページの内容の反映、frontmatter と本文の規約、書いた後の確認 |
 | `.claude/skills/wiki-lint/SKILL.md` | wiki の点検手順。ユーザーが `/wiki-lint` で呼び出したときだけ実行される |
 | `wiki/index.md` | wiki の入口。`okf_version` の宣言、重要ページ、各ディレクトリへのリンク |
 | `wiki/{references,sources,research,findings,notes,ideas}/` | ページの置き場所。ディレクトリと frontmatter の `type` が 1 対 1 で対応する |
@@ -62,14 +63,15 @@ resource: ../../src/cache.ts
 ---
 ```
 
-詳しい規約は `.claude/skills/wiki-write/SKILL.md`、OKF との対応は `docs/okf-profile.md` を参照。
+詳しい規約は `.claude/skills/wiki-write/SKILL.md`、Source ページの書式は `.claude/skills/wiki-ingest/SKILL.md`、OKF との対応は `docs/okf-profile.md` を参照。
 
 ## wiki の使い方
 
 | やりたいこと | 頼み方の例 | エージェントの動き |
 | --- | --- | --- |
 | 調べる | 「wiki に foo について何か書いてある?」 | 読むときのルールに従って必要なページだけを読み、参照したページを示して答える。wiki は書き換えない |
-| 資料を取り込む | 「この URL を wiki に取り込んで」 | `wiki-write` に従い、Source ページを作るか追記して、資料から分かったことを `research/` などに反映する |
+| 資料を取り込む | 「この URL を wiki に取り込んで」(複数の URL でもよい) | `wiki-ingest` に従い、資料ごとに Source ページを作るか追記する。`research/` などに反映する価値がありそうな内容を報告する |
+| 資料の内容を反映する | 「`sources/` の新しいページを `research/` に反映して」 | `wiki-write` に従い、Source ページから分かったことを既存ページに追記するか、新しいページを作る |
 | 結果を残す | 「今の調査結果を wiki に残して」 | `wiki-write` に従い、置き場所を判断して既存ページに追記するか、新しいページを作る |
 | 点検する | `/wiki-lint`、`/wiki-lint wiki/research` | 書式の崩れ、リンク切れ、矛盾、古い記述を報告する。直すのはユーザーが選んだものだけ |
 
@@ -88,7 +90,7 @@ resource: ../../src/cache.ts
 
 ### 既存のリポジトリに導入する
 
-1. `.claude/rules/wiki.md`、`.claude/skills/wiki-write/`、`.claude/skills/wiki-lint/`、`wiki/`、`docs/okf-profile.md` をコピーする
+1. `.claude/rules/wiki.md`、`.claude/skills/wiki-ingest/`、`.claude/skills/wiki-write/`、`.claude/skills/wiki-lint/`、`wiki/`、`docs/okf-profile.md` をコピーする
 2. `CLAUDE.md` の「wiki — 知識ベース」の節を、既存の `CLAUDE.md` (無ければ新規) に書き写す
 3. Claude Code 以外のエージェントも使うなら `AGENTS.md` をコピーする。既存の `AGENTS.md` があれば「ルールと手順」の節を書き写す
 
@@ -192,5 +194,7 @@ docs/                     最終成果物 (レポート、発表資料)
   ([qmd](https://github.com/tobi/qmd) など) を入れ、`.claude/rules/wiki.md` の「探し方」に使い方を書く
 - **点検の自動化**: frontmatter の崩れやリンク切れが頻繁に起きるようになったら、`wiki-lint` の機械的な点検をスクリプトにし、
   Claude Code の hook (`PostToolUse`) で `wiki/` の編集のたびに実行する
+- **取り込みを別のコンテキストで行う**: 一度に多数の資料を取り込んでメインの会話のコンテキストが埋まるようになったら、
+  `wiki-ingest` を `context: fork` にしてサブエージェントで実行し、報告だけを受け取る
 - **読み取り専用の検索 skill**: wiki を調べる途中経過でメインの会話のコンテキストが埋まるようになったら、
   サブエージェントで検索して答えと参照ページだけを返す skill (`context: fork`) を足す

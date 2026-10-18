@@ -9,8 +9,11 @@ paths:
 の簡易プロファイルで運用する知識バンドル。このプロジェクトの調査・学び・アイデアを蓄積する。
 OKF のどの仕様を採用したかと理由は `docs/okf-profile.md` にある。
 
-このファイルには wiki を読むときに必要なことを書く。ページを作成・更新するときは、書き始める前に
-`wiki-write` skill の手順と規約に従う (Claude Code 以外のエージェントは `.claude/skills/wiki-write/SKILL.md` を読む)。
+このファイルには wiki を読むときに必要なことを書く。書くときは、書き始める前に次の skill の手順と規約に従う
+(Claude Code 以外のエージェントは `.claude/skills/<name>/SKILL.md` を読む)。
+
+- 外部資料を取り込んで `sources/` に記録するとき → `wiki-ingest`
+- それ以外のページを作成・更新するとき → `wiki-write`
 
 ## 構成
 
