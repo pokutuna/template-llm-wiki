@@ -1,5 +1,5 @@
-#!/bin/sh
-set -eu
+#!/usr/bin/env bash
+set -euo pipefail
 
 dir=wiki/
 words=
@@ -24,7 +24,8 @@ for arg in "$@"; do
   esac
 done
 
-rg --files "$dir" -g '*.md' -g '!index.md' | sort | while IFS= read -r file; do
+# ページが 1 つも無いときの rg の終了コード 1 は正常とする
+{ rg --files "$dir" -g '*.md' -g '!index.md' || [ $? -eq 1 ]; } | sort | while IFS= read -r file; do
   awk -v file="$file" -v words="$words" -v tag="$tag" -v with_deprecated="$with_deprecated" '
     FNR == 1 { in_frontmatter = ($0 == "---"); next }
     in_frontmatter && $0 == "---" {
@@ -55,7 +56,6 @@ rg --files "$dir" -g '*.md' -g '!index.md' | sort | while IFS= read -r file; do
     in_frontmatter && /^status:/ {
       status = $0
       sub(/^status:[[:space:]]*/, "", status)
-      sub(/[[:space:]]+#.*$/, "", status)
     }
   ' "$file"
 done
