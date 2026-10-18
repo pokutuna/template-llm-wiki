@@ -3,59 +3,10 @@ paths:
   - "wiki/**"
 ---
 
-# wiki/ 運用ルール
+# wiki/ の読み書き
 
-`wiki/` は、このプロジェクトで調べたこと、分かったこと、これから試す案を蓄積する知識ベースである。
-このファイルには読み方を書く。書くときは、書き始める前に次の skill の手順と規約に従う。
+`wiki/` 以下のディレクトリ構造は `wiki/index.md` を参照する。読み書きは、場面に応じて次の skill の手順に従う。
 
-- 外部資料を取り込んで `sources/` に記録するとき → `wiki-ingest`
-- それ以外のページを作成・更新するとき → `wiki-write`
-
-## 構成
-
-| 場所 | type | 内容 |
-| --- | --- | --- |
-| `wiki/references/` | `Reference` | 従う手順・制約・前提知識 |
-| `wiki/sources/` | `Source` | 外部資料のどこに何が書いてあるか。資料 (ドキュメントサイト、リポジトリ、論文など) ごとに 1 ページ |
-| `wiki/research/` | `Research` | 読んだ資料に基づく、テーマごとの調査結果 |
-| `wiki/findings/` | `Finding` | このプロジェクトの作業や実験で分かった理解・因果・教訓 |
-| `wiki/notes/` | `Note` | 経緯を後から辿りたい作業・調査・障害の時点記録 |
-| `wiki/ideas/` | `Idea` | これから試す案 |
-
-`wiki/index.md` は入口で、全作業の前提になる重要ページと各ディレクトリへのリンクを持つ。全ページの一覧ではない。
-
-## 探し方
-
-1. `wiki/index.md` を読む
-2. 対象のディレクトリを絞り、各ページ frontmatter の `description` で読むべきページの見当を付ける
-3. 必要なページだけを開く。wiki 全体を読み込まない
-
-```sh
-wiki/scripts/list-pages.sh DIR=wiki/research                    # title と description の一覧
-wiki/scripts/list-pages.sh DIR=wiki/research WORDS='foo|bar'    # 語 (正規表現) で絞る
-rg -l 'foo' wiki/                                                # 本文の全文検索
-rg '^resource: https://docs.example.com' wiki/sources            # 資料の Source ページがあるか
-```
-
-## 読み方
-
-- `status: deprecated` のページは現行ではない。冒頭のリンクから後継ページを読む
-- 本文中の次の形の注記 (更新注記) は、直前の記述が古くなったことを示す。古い記述は経緯として残してあり、注記の内容が現行である
-
-  ```markdown
-  > [!NOTE]
-  > 2026-10-18 更新: v2 からデフォルトで有効になった。[Example ドキュメント](../sources/example-docs.md)
-  ```
-
-- `sources/` のページは、読んだ日の時点の資料の要約と抜粋である。答えに使うときは読んだ日と資料へのリンクを添える。
-  Source ページに無い内容や、最新かどうかが問題になる内容は、元の資料を開いて確かめる
-- `verified` の無いページは、人が内容を確認していない
-- 未執筆のページへのリンクは、これから書くべきページを示すために意図的に置かれている
-
-## 質問に答えるとき
-
-- wiki を読んで質問に答えるだけのときは、wiki のファイルを書き換えない
-- wiki に書かれていることと、それ以外 (一般的な知識や推測) を分けて答え、参照したページのパスを示す
-- wiki に情報が無いと答える前に、`index.md`、`list-pages.sh`、同義語を含めた `rg` の全文検索で探す
-- 答える中で、wiki に無かった知識 (調べて分かったこと、複数ページをまとめた比較や分析) や、wiki の食い違い・古い記述が見つかったら、
-  wiki への記録や修正を提案する。書くのはユーザーが同意してから
+- wiki の知識を使うとき、書く前に既存のページを探すとき: `wiki-search` (`.claude/skills/wiki-search/SKILL.md`)
+- ページを作成・更新するとき: `wiki-write` (`.claude/skills/wiki-write/SKILL.md`)
+- 外部資料を `sources/` に取り込むとき: `wiki-ingest` (`.claude/skills/wiki-ingest/SKILL.md`)

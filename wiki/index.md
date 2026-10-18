@@ -1,23 +1,11 @@
----
-okf_version: "0.2"
----
-
 # wiki
-
-<!-- 見出しをプロジェクト名に置き換える。例: # my-project wiki -->
-
-このプロジェクトの知識ベース。読み方は `.claude/rules/wiki.md`、書き方は `.claude/skills/wiki-ingest/SKILL.md` (資料の取り込み) と `.claude/skills/wiki-write/SKILL.md` (それ以外) を参照。
-ここは全ページの一覧ではなく、重要ページへの入口とする。
 
 ## 重要
 
-<!-- 全作業の前提になるページだけを、相対リンクと 1 行の説明の箇条書きで載せる -->
-
 ## 分類
 
-- [references/](references/) - 従う手順・制約・前提知識
-- [sources/](sources/) - 外部資料のどこに何が書いてあるか。資料ごとに 1 ページ
-- [research/](research/) - 読んだ資料に基づく調査。テーマ単位で育てる
-- [findings/](findings/) - このプロジェクトの作業や実験で分かった理解・因果・教訓。テーマ単位で育てる
-- [notes/](notes/) - 経緯を後から辿りたい作業・調査・障害の記録。日付付きで記録する
-- [ideas/](ideas/) - これから試す案
+* [guides/](guides/) - 繰り返し参照する手順・方針・前提知識
+* [sources/](sources/) - 取り込んだ外部資料の内容
+* [research/](research/) - 調査の結果
+* [findings/](findings/) - このプロジェクトの作業や実験で分かったこと
+* [notes/](notes/) - ある時点の作業メモや考え
